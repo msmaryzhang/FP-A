@@ -1,0 +1,10 @@
+SELECT 
+    department,
+    SUM(CASE WHEN transaction_type = 'Revenue' THEN amount ELSE 0 END) AS total_revenue,
+    SUM(CASE WHEN transaction_type = 'Expense' THEN amount ELSE 0 END) AS total_expenses,
+    SUM(CASE WHEN transaction_type = 'Revenue' THEN amount ELSE 0 END) - 
+    SUM(CASE WHEN transaction_type = 'Expense' THEN amount ELSE 0 END) AS net_income
+FROM 
+    financial_transactions
+GROUP BY 
+    department;
