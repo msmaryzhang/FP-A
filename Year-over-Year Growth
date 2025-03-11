@@ -1,0 +1,11 @@
+SELECT 
+    EXTRACT(YEAR FROM transaction_date) AS year,
+    SUM(CASE WHEN transaction_type = 'Revenue' THEN amount ELSE 0 END) AS total_revenue,
+    LAG(SUM(CASE WHEN transaction_type = 'Revenue' THEN amount ELSE 0 END)) OVER (ORDER BY EXTRACT(YEAR FROM transaction_date)) AS previous_year_revenue,
+    (SUM(CASE WHEN transaction_type = 'Revenue' THEN amount ELSE 0 END) - 
+    LAG(SUM(CASE WHEN transaction_type = 'Revenue' THEN amount ELSE 0 END)) OVER (ORDER BY EXTRACT(YEAR FROM transaction_date))) / 
+    LAG(SUM(CASE WHEN transaction_type = 'Revenue' THEN amount ELSE 0 END)) OVER (ORDER BY EXTRACT(YEAR FROM transaction_date)) * 100 AS yoy_growth_percentage
+FROM 
+    financial_transactions
+GROUP BY 
+    EXTRACT(YEAR FROM transaction_date);
