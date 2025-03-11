@@ -1,0 +1,10 @@
+SELECT 
+    company_id,
+    SUM(CASE WHEN account_type = 'Current Asset' THEN amount ELSE 0 END) AS total_current_assets,
+    SUM(CASE WHEN account_type = 'Current Liability' THEN amount ELSE 0 END) AS total_current_liabilities,
+    SUM(CASE WHEN account_type = 'Current Asset' THEN amount ELSE 0 END) / 
+    NULLIF(SUM(CASE WHEN account_type = 'Current Liability' THEN amount ELSE 0 END), 0) AS current_ratio
+FROM 
+    financial_accounts
+GROUP BY 
+    company_id;
