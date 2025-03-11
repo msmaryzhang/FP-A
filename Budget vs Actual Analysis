@@ -1,0 +1,10 @@
+SELECT 
+    account_id,
+    SUM(CASE WHEN transaction_type = 'Actual' THEN amount ELSE 0 END) AS actual,
+    SUM(CASE WHEN transaction_type = 'Budgeted' THEN amount ELSE 0 END) AS budgeted,
+    SUM(CASE WHEN transaction_type = 'Actual' THEN amount ELSE 0 END) - 
+    SUM(CASE WHEN transaction_type = 'Budgeted' THEN amount ELSE 0 END) AS variance
+FROM 
+    financial_transactions
+GROUP BY 
+    account_id;
