@@ -1,0 +1,10 @@
+SELECT 
+    EXTRACT(MONTH FROM transaction_date) AS month,
+    SUM(CASE WHEN transaction_type = 'Cash Inflow' THEN amount ELSE 0 END) AS total_inflows,
+    SUM(CASE WHEN transaction_type = 'Cash Outflow' THEN amount ELSE 0 END) AS total_outflows,
+    SUM(CASE WHEN transaction_type = 'Cash Inflow' THEN amount ELSE 0 END) - 
+    SUM(CASE WHEN transaction_type = 'Cash Outflow' THEN amount ELSE 0 END) AS net_cash_flow
+FROM 
+    cash_transactions
+GROUP BY 
+    EXTRACT(MONTH FROM transaction_date);
