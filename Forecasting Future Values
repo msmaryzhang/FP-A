@@ -1,0 +1,21 @@
+WITH monthly_revenue AS (
+    SELECT 
+        EXTRACT(MONTH FROM transaction_date) AS month,
+        EXTRACT(YEAR FROM transaction_date) AS year,
+        SUM(CASE WHEN transaction_type = 'Revenue' THEN amount ELSE 0 END) AS total_revenue
+    FROM 
+        financial_transactions
+    GROUP BY 
+        EXTRACT(YEAR FROM transaction_date),
+        EXTRACT(MONTH FROM transaction_date)
+)
+SELECT 
+    year,
+    month + 1 AS next_month,
+    AVG(total_revenue) AS forecasted_revenue
+FROM 
+    monthly_revenue
+WHERE 
+    year = EXTRACT(YEAR FROM CURRENT_DATE)
+GROUP BY 
+    year, month;
